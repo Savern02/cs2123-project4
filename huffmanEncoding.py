@@ -1,5 +1,5 @@
 def wordCount(bookName):
-    with open(bookName) as f:
+    with open(bookName, mode = 'r', encoding='utf-8-sig') as f:
         D = {} #occurrences counting dictionary
         wcnt = 0 #total character
         while True:

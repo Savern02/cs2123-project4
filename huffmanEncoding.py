@@ -16,9 +16,24 @@ def frequency(D, wcnt):
     frequencyDic = {}
     for word in D:
         freq = (D[word])/wcnt
-        frequencyDic[word] = freq
+        frequencyDic[freq] = word
     return frequencyDic
          
+def makeTrie(freqD):
+    heap = []
+    trie = [] * len(freqD.keys()) #trie of the tuples,
+    for freq in freqD:
+        #add them to the priority queue
+        letter = (freq, freqD[freq])
+        heapq.heappush(heap, letter)
+    while len(heap) > 1:
+        #create a tuple pair of the letter (frequency, letter pair), then add them back to the heap
+        letter1 = heapq.heappop(heap)
+        letter2 = heapq.heappop(heap)
+        pair = (letter1[0]+letter2[0], letter1[1]+letter2[1])
+        heapq.heappush(heap, pair)
+        print(pair)
+
 
 
 if __name__ == "__main__":
@@ -29,4 +44,6 @@ if __name__ == "__main__":
     print(wcnt)
     freqD = frequency(listOfChars, wcnt)
     print(freqD)
+    makeTrie(freqD)
+
 

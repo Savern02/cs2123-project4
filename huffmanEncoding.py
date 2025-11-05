@@ -1,3 +1,4 @@
+import heapq
 def wordCount(bookName):
     with open(bookName, mode = 'r', encoding='utf-8-sig') as f:
         D = {} #occurrences counting dictionary
@@ -11,10 +12,21 @@ def wordCount(bookName):
                     if x in D: D[x]+=1
                     else: D[x]=1
 
+def frequency(D, wcnt):
+    frequencyDic = {}
+    for word in D:
+        freq = (D[word])/wcnt
+        frequencyDic[word] = freq
+    return frequencyDic
+         
+
 
 if __name__ == "__main__":
-    bookName = "books/" + input("Input Book.txt: ")
+    # bookName = "books/" + input("Input Book.txt: ")
+    bookName = "books/book1.txt"
     listOfChars, wcnt = wordCount(bookName) 
     print(listOfChars)
     print(wcnt)
+    freqD = frequency(listOfChars, wcnt)
+    print(freqD)
 

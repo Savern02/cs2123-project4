@@ -72,7 +72,7 @@ def makeEncoding(tree: Node, currWord="", codes=None):
     return codes
 
 def encodeBook(bookName, encodingD):
-    with open(bookName, mode = 'r', encoding='utf-8-sig') as f, open(bookName + ".bin", mode = 'wb') as f2:
+    with open(bookName + ".txt", mode = 'r', encoding='utf-8-sig') as f, open(bookName + ".bin", mode = 'wb') as f2:
         byteString = ""
         while True:
             line = f.readline() #read in a line (newline char included)

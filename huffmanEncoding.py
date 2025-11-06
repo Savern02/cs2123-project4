@@ -47,9 +47,29 @@ def makeTrie(freqD):
         combinedWord = word1.data[0] + word2.data[0]
         tup = (combinedWord, freq)
         pair  = Node(tup)
+        pair.left = word1
+        pair.right = word2
         heapq.heappush(heap, pair)
         print(pair.data[0])
+    
+    return heapq.heappop(heap)
 
+def makeEncoding(tree: Node, currWord="", codes=None):
+    if codes is None:
+        codes = {}
+
+    # Stop at every leaf node
+    if tree.left is None and tree.right is None:
+        codes[tree.data[0]] = currWord
+        return codes
+
+         # Left = 0 and Right = 1 
+    if tree.left is not None:
+        makeEncoding(tree.left, currWord + "0", codes)
+    if tree.right is not None:
+        makeEncoding(tree.right, currWord + "1", codes)
+
+    return codes
 
 
 if __name__ == "__main__":
@@ -60,6 +80,11 @@ if __name__ == "__main__":
     print(wcnt)
     freqD = frequency(listOfChars, wcnt)
     print(freqD)
-    makeTrie(freqD)
+    tree = makeTrie(freqD)
+    print(tree.data[0])
+    encodingD = makeEncoding(tree)
+    print(encodingD)
+    print(len(encodingD))
+    print(len(freqD))
 
 

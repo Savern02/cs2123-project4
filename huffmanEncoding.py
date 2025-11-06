@@ -11,7 +11,7 @@ class Node:
             return self.data[1] < other.data[1]
 
 def wordCount(bookName):
-    with open("/books" + bookName + ".txt", mode = 'r') as f:
+    with open("books/" + bookName + ".txt", mode = 'r') as f:
         D = {} #occurrences counting dictionary
         wcnt = 0 #total character
         while True:
@@ -75,7 +75,7 @@ def makeEncoding(tree: Node, currCode="", codes = None, decode = None):
     return codes, decode
 
 def encodeBook(bookName, encodingD):
-    with open(bookName + ".txt", mode = 'r', encoding='utf-8-sig') as f, open(bookName + ".bin", mode = 'wb') as f2:
+    with open("books/" + bookName + ".txt", mode = 'r', encoding='utf-8-sig') as f, open("booksOut/"+bookName + ".bin", mode = 'wb') as f2:
         byteString = ""
         while True:
             line = f.readline() #read in a line (newline char included)
@@ -139,16 +139,16 @@ if __name__ == "__main__":
     # print(bookName)
     # print(compression_ratio)
     # decodeBook(bookName, decodingD)
-    if i in range(0, 6):
-        bookName = "book" + i
+    for i in range(1, 7):
+        bookName = "book" + str(i)
         listOfChars, wcnt = wordCount(bookName) 
         freqD = frequency(listOfChars, wcnt)
         tree = makeTrie(freqD)
         encodingD, decodingD = makeEncoding(tree)
         
         #book output
-        bookName = "booksOut/" + bookName
         numOfBits = encodeBook(bookName, encodingD)
+        bookName = "booksOut/" + bookName
         compression_ratio = numOfBits/wcnt
         print(bookName)
         print(compression_ratio)

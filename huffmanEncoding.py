@@ -1,4 +1,14 @@
 import heapq
+class Node:
+    def __init__(self, data):
+        self.data = data
+        # Pointer to the left child node
+        self.left = None
+        # Pointer to the right child node
+        self.right = None
+    def __lt__(self, other):
+            return self.data[1] < other.data[1]
+
 def wordCount(bookName):
     with open(bookName, mode = 'r', encoding='utf-8-sig') as f:
         D = {} #occurrences counting dictionary
@@ -16,23 +26,29 @@ def frequency(D, wcnt):
     frequencyDic = {}
     for word in D:
         freq = (D[word])/wcnt
-        frequencyDic[freq] = word
+        frequencyDic[word] = freq
     return frequencyDic
          
 def makeTrie(freqD):
-    heap = []
-    trie = [] * len(freqD.keys()) #trie of the tuples,
-    for freq in freqD:
+    heap = [] 
+    for word in freqD:
         #add them to the priority queue
-        letter = (freq, freqD[freq])
-        heapq.heappush(heap, letter)
+        tup = (word, freqD[word])
+        element = Node(tup)
+        print(element)
+        heapq.heappush(heap, element)
+
     while len(heap) > 1:
         #create a tuple pair of the letter (frequency, letter pair), then add them back to the heap
-        letter1 = heapq.heappop(heap)
-        letter2 = heapq.heappop(heap)
-        pair = (letter1[0]+letter2[0], letter1[1]+letter2[1])
+        word1 = heapq.heappop(heap)
+        word2 = heapq.heappop(heap)
+        
+        freq = word1.data[1] + word2.data[1]
+        combinedWord = word1.data[0] + word2.data[0]
+        tup = (combinedWord, freq)
+        pair  = Node(tup)
         heapq.heappush(heap, pair)
-        print(pair)
+        print(pair.data[0])
 
 
 

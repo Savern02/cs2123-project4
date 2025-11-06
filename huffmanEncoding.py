@@ -11,7 +11,7 @@ class Node:
             return self.data[1] < other.data[1]
 
 def wordCount(bookName):
-    with open(bookName + ".txt", mode = 'r') as f:
+    with open("/books" + bookName + ".txt", mode = 'r') as f:
         D = {} #occurrences counting dictionary
         wcnt = 0 #total character
         while True:
@@ -121,23 +121,37 @@ def decodeBook(bookName, encodingD ):
 
 
 if __name__ == "__main__":
-    # bookName = "books/" + input("Input Book.txt: ")
-    bookName = "books/book1"
-    listOfChars, wcnt = wordCount(bookName) 
-    # print(listOfChars)
-    # print(wcnt)
-    freqD = frequency(listOfChars, wcnt)
-    # print(freqD)
-    tree = makeTrie(freqD)
-    # print(tree.data[0])
-    encodingD, decodingD = makeEncoding(tree)
-    # print(encodingD)
-    # print(len(encodingD))
-    # print(len(freqD))
-    numOfBits = encodeBook(bookName, encodingD)
-    compression_ratio = numOfBits/wcnt
-    print(bookName)
-    print(compression_ratio)
-    decodeBook(bookName, decodingD)
+    # # bookName = "books/" + input("Input Book.txt: ")
+    # bookName = "books/book1"
+    # listOfChars, wcnt = wordCount(bookName) 
+    # # print(listOfChars)
+    # # print(wcnt)
+    # freqD = frequency(listOfChars, wcnt)
+    # # print(freqD)
+    # tree = makeTrie(freqD)
+    # # print(tree.data[0])
+    # encodingD, decodingD = makeEncoding(tree)
+    # # print(encodingD)
+    # # print(len(encodingD))
+    # # print(len(freqD))
+    # numOfBits = encodeBook(bookName, encodingD)
+    # compression_ratio = numOfBits/wcnt
+    # print(bookName)
+    # print(compression_ratio)
+    # decodeBook(bookName, decodingD)
+    if i in range(0, 6):
+        bookName = "book" + i
+        listOfChars, wcnt = wordCount(bookName) 
+        freqD = frequency(listOfChars, wcnt)
+        tree = makeTrie(freqD)
+        encodingD, decodingD = makeEncoding(tree)
+        
+        #book output
+        bookName = "booksOut/" + bookName
+        numOfBits = encodeBook(bookName, encodingD)
+        compression_ratio = numOfBits/wcnt
+        print(bookName)
+        print(compression_ratio)
+        decodeBook(bookName, decodingD)
 
 

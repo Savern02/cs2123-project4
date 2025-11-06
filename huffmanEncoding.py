@@ -1,4 +1,5 @@
 import heapq
+import sys
 class Node:
     def __init__(self, data):
         self.data = data
@@ -76,7 +77,7 @@ def encodeBook(bookName, encodingD):
         byteString = ""
         while True:
             line = f.readline() #read in a line (newline char included)
-            if len(line)==0: return #end of the book
+            if len(line)==0: break #end of the book
             else:
                 for x in line: #extract each char and find its encoding
                     byte = encodingD[x]
@@ -84,8 +85,11 @@ def encodeBook(bookName, encodingD):
 
         while len(byteString) % 8 != 0:
             byteString += "0"
+        
+        for i in range(0, len(byteString), 8):
+            byte = int(byteString[i:i+8], 2)     #get 8 bits base 2
+            f2.write(byte.to_bytes(1, "big")) #write to the binary file
 
-        f2.write(to_bytes(byteString))
             
                    
 

@@ -36,7 +36,7 @@ def makeTrie(freqD):
         #add them to the priority queue
         tup = (word, freqD[word])
         element = Node(tup)
-        print(element)
+        # print(element)
         heapq.heappush(heap, element)
 
     while len(heap) > 1:
@@ -51,7 +51,7 @@ def makeTrie(freqD):
         pair.left = word1
         pair.right = word2
         heapq.heappush(heap, pair)
-        print(pair.data[0])
+        # print(pair.data[0])
     
     return heapq.heappop(heap)
 
@@ -85,12 +85,12 @@ def encodeBook(bookName, encodingD):
 
         while len(byteString) % 8 != 0:
             byteString += "0"
-        
+        byteLen = len(byteString) / 8
         for i in range(0, len(byteString), 8):
             byte = int(byteString[i:i+8], 2)     #get 8 bits base 2
             f2.write(byte.to_bytes(1, "big")) #write to the binary file
 
-            
+        return int(byteLen)
                    
 
 
@@ -111,6 +111,8 @@ if __name__ == "__main__":
     # print(encodingD)
     # print(len(encodingD))
     # print(len(freqD))
-    encodeBook(bookName, encodingD)
+    numOfBits = encodeBook(bookName, encodingD)
+    compression_ratio = numOfBits/wcnt
+    print(compression_ratio)
 
 

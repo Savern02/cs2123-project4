@@ -10,7 +10,7 @@ class Node:
             return self.data[1] < other.data[1]
 
 def wordCount(bookName):
-    with open(bookName, mode = 'r', encoding='utf-8-sig') as f:
+    with open(bookName + ".txt", mode = 'r', encoding='utf-8-sig') as f:
         D = {} #occurrences counting dictionary
         wcnt = 0 #total character
         while True:
@@ -71,20 +71,42 @@ def makeEncoding(tree: Node, currWord="", codes=None):
 
     return codes
 
+def encodeBook(bookName, encodingD):
+    with open(bookName, mode = 'r', encoding='utf-8-sig') as f, open(bookName + ".bin", mode = 'wb') as f2:
+        byteString = ""
+        while True:
+            line = f.readline() #read in a line (newline char included)
+            if len(line)==0: return #end of the book
+            else:
+                for x in line: #extract each char and find its encoding
+                    byte = encodingD[x]
+                    byteString += byte
+
+        while len(byteString) % 8 != 0:
+            byteString += "0"
+
+        f2.write(to_bytes(byteString))
+            
+                   
+
+
+ 
+
 
 if __name__ == "__main__":
     # bookName = "books/" + input("Input Book.txt: ")
-    bookName = "books/book1.txt"
+    bookName = "books/book1"
     listOfChars, wcnt = wordCount(bookName) 
-    print(listOfChars)
-    print(wcnt)
+    # print(listOfChars)
+    # print(wcnt)
     freqD = frequency(listOfChars, wcnt)
-    print(freqD)
+    # print(freqD)
     tree = makeTrie(freqD)
-    print(tree.data[0])
+    # print(tree.data[0])
     encodingD = makeEncoding(tree)
-    print(encodingD)
-    print(len(encodingD))
-    print(len(freqD))
+    # print(encodingD)
+    # print(len(encodingD))
+    # print(len(freqD))
+    encodeBook(bookName, encodingD)
 
 

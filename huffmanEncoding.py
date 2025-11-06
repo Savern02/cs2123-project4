@@ -11,7 +11,7 @@ class Node:
             return self.data[1] < other.data[1]
 
 def wordCount(bookName):
-    with open(bookName + ".txt", mode = 'r', encoding='utf-8-sig') as f:
+    with open(bookName + ".txt", mode = 'r') as f:
         D = {} #occurrences counting dictionary
         wcnt = 0 #total character
         while True:
@@ -55,22 +55,24 @@ def makeTrie(freqD):
     
     return heapq.heappop(heap)
 
-def makeEncoding(tree: Node, currWord="", codes=None):
+def makeEncoding(tree: Node, currCode="", codes = None, decode = None):
     if codes is None:
         codes = {}
+        decode = {}
 
     # Stop at every leaf node
     if tree.left is None and tree.right is None:
-        codes[tree.data[0]] = currWord
-        return codes
+        codes[tree.data[0]] = currCode
+        decode[currCode] = tree.data[0]
+        return codes, decode
 
          # Left = 0 and Right = 1 
     if tree.left is not None:
-        makeEncoding(tree.left, currWord + "0", codes)
+        makeEncoding(tree.left, currCode + "0", codes, decode)
     if tree.right is not None:
-        makeEncoding(tree.right, currWord + "1", codes)
+        makeEncoding(tree.right, currCode + "1", codes, decode)
 
-    return codes
+    return codes, decode
 
 def encodeBook(bookName, encodingD):
     with open(bookName + ".txt", mode = 'r', encoding='utf-8-sig') as f, open(bookName + ".bin", mode = 'wb') as f2:
@@ -91,7 +93,28 @@ def encodeBook(bookName, encodingD):
             f2.write(byte.to_bytes(1, "big")) #write to the binary file
 
         return int(byteLen)
-                   
+
+def decodeBook(bookName, encodingD ):
+    with open(bookName + ".bin", mode = 'rb') as f, open(bookName + "copy.txt", mode = "w") as f2:
+        bit_string = ""
+        while True:
+            line = f.read()
+            if len(line)==0: break
+            for byte in line:
+                # Convert each line to 8-bit binary string so that we can go through and decode, then concatenate
+                bits = bin(byte)[2:].rjust(8, '0')
+                bit_string += bits
+    
+        current_bits = ""
+        for bit in bit_string:
+            current_bits += bit
+            #search bit by bit through the dictornary for the first encoding (not very optimal lol)
+            if current_bits in encodingD:
+                decoded_text = encodingD[current_bits]
+                # print(decoded_text)
+                f2.write(decoded_text)
+                current_bits = ""  # Reset for next symbol
+                    
 
 
  
@@ -107,12 +130,14 @@ if __name__ == "__main__":
     # print(freqD)
     tree = makeTrie(freqD)
     # print(tree.data[0])
-    encodingD = makeEncoding(tree)
+    encodingD, decodingD = makeEncoding(tree)
     # print(encodingD)
     # print(len(encodingD))
     # print(len(freqD))
     numOfBits = encodeBook(bookName, encodingD)
     compression_ratio = numOfBits/wcnt
+    print(bookName)
     print(compression_ratio)
+    decodeBook(bookName, decodingD)
 
 
